@@ -73,6 +73,11 @@ varying vec3 v_position;
 
 const vec4 dark = vec4(0.1,0.2,0.1,1.0);
 const vec4 green = vec4(0.0,1.0,0.0,1.0);
+const vec4 red = vec4(1.0,0.0,0.0,1.0);
+const vec4 blue = vec4(0.0,0.0,1.0,1.0);
+const vec4 orange = vec4(1.0,0.46,0.0,1.0);
+const vec4 ice = vec4(0.0,1.0,1.0,1.0);
+const vec4 black = vec4(0.0,0.0,0.0,1.0);
 
 void main(){
     vec3 v_normal = normalize(cross(dFdy(v_position), dFdx(v_position))); // N is the world normal
@@ -91,14 +96,9 @@ void main(){
     brightness = max(min(brightness,1.0),0.0);
 
     float z = v_position.z;
-    vec4 v_color = vec4(0.0,0.0,0.0,0.0);
-    vec4 red = vec4(1.0,0.0,0.0,1.0);
-    vec4 green = vec4(0.0,1.0,0.0,1.0);
-    vec4 blue = vec4(0.0,0.0,1.0,1.0);
-    vec4 orange = vec4(1.0,0.46,0.0,1.0);
-    vec4 ice = vec4(0.0,1.0,1.0,1.0);
-    vec4 black = vec4(0.0,0.0,0.0,1.0);
 
+    vec3 v_color = vec4(0.0,0.0,0.0,0.0);
+    
     v_color = mix(blue, blue, smoothstep(0, 68, z));
     v_color = mix(v_color, ice, smoothstep(68, 74, z));
     v_color = mix(v_color, green, smoothstep(74, 80, z));
