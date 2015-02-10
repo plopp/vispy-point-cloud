@@ -40,10 +40,11 @@ import numpy as np
 import math
 from vispy import app
 from vispy import gloo
-from vispy.util.transforms import perspective, translate, xrotate, yrotate, zrotate
+from vispy.util.transforms import perspective, translate, xrotate, yrotate, zrotate, scale
 from scipy.spatial import Delaunay
 
 triangles = []
+cellsize = 1.0
 
 vertex = """
 uniform   mat4 u_model;
@@ -56,7 +57,7 @@ varying vec3 v_position;
 varying vec3 v_normal;
 
 void main (void) {
-    gl_Position = u_projection * u_view * u_model * vec4(a_position, 1.0); 
+    gl_Position = u_projection * u_view * u_model * vec4(a_position, 1.0); //Ajust for map scaling 
     v_position = a_position;
 }
 """
@@ -113,9 +114,9 @@ void main(){
 """
 
 class Canvas(app.Canvas):
-    lightx = -625
-    lighty = -625
-    lightz = -2000
+    lightx = -8000
+    lighty = -8000
+    lightz = -4000
 
     def __init__(self):
         app.Canvas.__init__(self, keys='interactive')
@@ -128,13 +129,14 @@ class Canvas(app.Canvas):
         self.rotate = [0, 0, 0]
         self.program["u_light_position"] = self.lightx,self.lighty,self.lightz
         self.program["u_light_intensity"] = 1, 1, 1
-        self.program['u_model'] = self.model
-        translate(self.view, -625, -625, -1000)
+        self.program['u_model'] = scale(self.model,cellsize,cellsize,1.0)
+        translate(self.view, -1250, -1250, -2000)
         zrotate(self.view, 90)
         self.program['u_view'] = self.view
         self.program['u_normal'] = np.array(np.matrix(np.dot(self.view, self.model)).I.T)
         self.update()
         self.program['a_position'] = gloo.VertexBuffer(triangles)
+        self.program['a_scale'] = np.array([cellsize,cellsize,1.0,1.0])
 
     def on_initialize(self, event):
         gloo.set_state(clear_color='black', depth_test=True)
@@ -224,7 +226,7 @@ class Canvas(app.Canvas):
     def on_resize(self, event):
         width, height = event.size
         gloo.set_viewport(0, 0, width, height)
-        self.projection = perspective(60.0, width / float(height), 1.0, 2000.0)
+        self.projection = perspective(60.0, width / float(height), 1.0, 4000.0)
         self.program['u_projection'] = self.projection
 
     def on_draw(self, event):
@@ -233,7 +235,7 @@ class Canvas(app.Canvas):
 
 
 def generate_points():
-    global triangles
+    global triangles,cellsize
     f = open('67250_5950_25.asc',mode='r')
 
     ncols = int(f.readline().split()[1]);
