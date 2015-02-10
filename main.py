@@ -97,8 +97,8 @@ void main(){
 
     float z = v_position.z;
 
-    vec3 v_color = vec4(0.0,0.0,0.0,0.0);
-    
+    vec4 v_color = vec4(0.0,0.0,0.0,0.0);
+
     v_color = mix(blue, blue, smoothstep(0, 68, z));
     v_color = mix(v_color, ice, smoothstep(68, 74, z));
     v_color = mix(v_color, green, smoothstep(74, 80, z));
@@ -133,7 +133,6 @@ class Canvas(app.Canvas):
         zrotate(self.view, 90)
         self.program['u_view'] = self.view
         self.program['u_normal'] = np.array(np.matrix(np.dot(self.view, self.model)).I.T)
-        self.program['a_position'] = gloo.VertexBuffer(triangles)
         self.update()
         self.program['a_position'] = gloo.VertexBuffer(triangles)
 
