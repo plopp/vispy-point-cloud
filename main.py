@@ -1,14 +1,8 @@
-#from liblas import file
 import numpy as np
-import matplotlib.pyplot as plt
-import matplotlib.cm as cm
-from mpl_toolkits.mplot3d import Axes3D
 import math
-
 from vispy import app
 from vispy import gloo
-from vispy.util.transforms import perspective, translate, xrotate, yrotate
-from vispy.util.transforms import zrotate
+from vispy.util.transforms import perspective, translate, xrotate, yrotate, zrotate
 from scipy.spatial import Delaunay
 
 triangles = []
