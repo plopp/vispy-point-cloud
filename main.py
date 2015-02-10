@@ -114,8 +114,8 @@ void main(){
 """
 
 class Canvas(app.Canvas):
-    lightx = -8000
-    lighty = -8000
+    lightx = -3000
+    lighty = -3000
     lightz = -4000
 
     def __init__(self):
